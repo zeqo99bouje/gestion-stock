@@ -18,7 +18,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             // Si email et password corrects ➔ rediriger vers /homepage
-            return redirect()->route('home');
+            return redirect()->route('dashboard');
         }
 
         return back()->withErrors([
