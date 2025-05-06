@@ -45,7 +45,7 @@
 
         /* Logo */
         .login-card img.logo {
-            max-width: 120px;
+            max-width: 200px;
             margin-bottom: 20px;
         }
 
