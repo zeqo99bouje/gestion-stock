@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion - EST Ouarzazate</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Ajout de Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         /* Réinitialisation et base */
         * {
@@ -43,7 +45,7 @@
 
         /* Logo */
         .login-card img.logo {
-            max-width: 200px;
+            max-width: 120px;
             margin-bottom: 20px;
         }
 
@@ -63,14 +65,17 @@
 
         /* Champs */
         .login-card input[type="email"],
-        .login-card input[type="password"] {
+        .login-card input[type="password"],
+        .login-card input[type="text"] { /* Ajout de type="text" pour uniformiser */
             width: 100%;
-            padding: 14px;
+            padding: 14px 40px 14px 14px; /* Padding ajusté pour l'icône */
             margin: 12px 0;
             border: 1px solid #e2e8f0;
             border-radius: 10px;
             background: #f7fafc;
             font-size: 16px;
+            font-family: 'Poppins', sans-serif; /* Uniformisation de la police */
+            line-height: 1.5; /* Uniformisation de la hauteur de ligne */
             transition: border-color 0.3s, box-shadow 0.3s;
         }
 
@@ -78,6 +83,26 @@
             outline: none;
             border-color: #007bff;
             box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+        }
+
+        /* Conteneur pour le champ de mot de passe */
+        .password-container {
+            position: relative;
+        }
+
+        .password-container .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #4a5568;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .password-container .toggle-password:hover {
+            color: #007bff;
         }
 
         /* Bouton */
@@ -126,14 +151,14 @@
             }
 
             .login-card img.logo {
-                max-width: 150px;
+                max-width: 100px;
             }
         }
     </style>
 </head>
 <body>
     <div class="login-card">
-        <!-- Logo de l'EST Ouarzazate (remplacez par le chemin de votre logo) -->
+        <!-- Logo de l'EST Ouarzazate -->
         <img src="{{ asset('assets/img/est_logo.jpg') }}" alt="EST Ouarzazate Logo" class="logo">
         <h2>Connexion</h2>
         <p>Gestion de stock - EST Ouarzazate</p>
@@ -151,9 +176,28 @@
         <form method="POST" action="{{ route('login.submit') }}">
             @csrf
             <input type="email" name="email" placeholder="Adresse e-mail" value="{{ old('email') }}" required>
-            <input type="password" name="password" placeholder="Mot de passe" required>
+            <!-- Conteneur pour le champ de mot de passe -->
+            <div class="password-container">
+                <input type="password" name="password" id="password" placeholder="Mot de passe" required>
+                <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+            </div>
             <button type="submit">Se connecter</button>
         </form>
     </div>
+
+    <!-- Script pour basculer l'affichage du mot de passe -->
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const passwordInput = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function () {
+            // Basculer le type d'input
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            // Basculer l'icône
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+    </script>
 </body>
 </html>
