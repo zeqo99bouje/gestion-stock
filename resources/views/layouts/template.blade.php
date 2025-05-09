@@ -58,7 +58,7 @@
             display: grid;
             border: 4px solid transparent;
             border-radius: 50%;
-            border-right-color: #25b09b;
+            border-right-color:rgb(13, 114, 139);
             animation: l15 1s infinite linear;
         }
 
