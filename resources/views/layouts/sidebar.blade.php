@@ -4,8 +4,8 @@
     <div class="sidepanel-inner d-flex flex-column">
         
         <div class="app-branding">
-            <a class="app-logo" href="{{ route('home') }}">
-                <h2 class="logo-text">EST Ouarzazate</h2>
+            <a class="app-logo" href="{{ route('dashboard') }}">
+                <img src="{{ asset('assets/img/logo esto Blue.jpg') }}" alt="EST Ouarzazate Logo" class="img-fluid">
             </a>
         </div>
 
@@ -13,7 +13,7 @@
             <ul class="app-menu list-unstyled accordion" id="menu-accordion">
                 <!-- Tableau de bord -->
                 <li class="nav-item">
-                    <a class="nav-link " href="{{ route('home') }}">
+                    <a class="nav-link " href="{{ route('dashboard') }}">
                         <span class="nav-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-house-door" viewBox="0 0 16 16">
                                 <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
@@ -25,10 +25,10 @@
 
                 <!-- Gestion de Stock -->
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('stock.index') ? 'active' : '' }}" href="#">
+                    <a class="nav-link {{ request()->routeIs('stock.index') ? 'active' : '' }}" href="{{ route('societes.index') }}">
                         <span class="nav-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-box" viewBox="0 0 16 16">
-    <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5 8.186 1.113zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.841V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-suitcase" viewBox="0 0 16 16">
+    <path d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5V4H6v-.5zM11 4v-.5A2.5 2.5 0 0 0 8.5 1h-1A2.5 2.5 0 0 0 5 3.5V4H1.5A1.5 1.5 0 0 0 0 5.5v7A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 14.5 4H11zm-9 1.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-7z"/>
 </svg>
                         </span>
                         <span class="nav-link-text">Sociétés</span>
@@ -38,7 +38,7 @@
 
                 <!-- Affectation -->
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('reports.index') ? 'active' : '' }}" href="#">
+                    <a class="nav-link {{ request()->routeIs('reports.index') ? 'active' : '' }}" href="{{ route('affectations.index') }}">
                         <span class="nav-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-bar-graph" viewBox="0 0 16 16">
                                 <path d="M4.5 12a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1zm3 0a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1zm3 0a.5.5 0 0 1-.5-.5v-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5h-1z"/>
@@ -51,41 +51,27 @@
 
                 <!-- Produits -->
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('reports.index') ? 'active' : '' }}" href="#">
+                    <a class="nav-link {{ request()->routeIs('reports.index') ? 'active' : '' }}" href="{{ route('produits.index') }}">
                         <span class="nav-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-box" viewBox="0 0 16 16">
-    <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5 8.186 1.113zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.841V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
-</svg>
+                            <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5 8.186 1.113zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.841V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
+                        </svg>
                         </span>
                         <span class="nav-link-text">Produits</span>
                     </a>
                 </li>
 
                  <!-- Mouvements -->
-                 <li class="nav-item has-submenu">
-                    <a class="nav-link submenu-toggle {{ request()->routeIs('entrees.*') || request()->routeIs('sorties.*') ? 'active' : '' }}" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-movements">
+                 <li class="nav-item">
+                    <a class="nav-link submenu-toggle {{ request()->routeIs('entrees.*') || request()->routeIs('sorties.*') ? 'active' : '' }}" href="{{ route('mouvements.index') }}">
                         <span class="nav-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-left-right" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5zm14-7a.5.5 0 0 1-.5-.5H2.707l3.147-3.146a.5.5 0 1 1 .708.708l-4 4a.5.5 0 0 1 0 .708l4 4a.5.5 0 0 1-.708.708L2.707 5H14.5a.5.5 0 0 1 .5.5z"/>
                             </svg>
                         </span>
                         <span class="nav-link-text">Mouvements</span>
-                        <span class="submenu-arrow">
-                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                            </svg>
-                        </span>
                     </a>
-                    <div id="submenu-movements" class="collapse submenu {{ request()->routeIs('entrees.*') || request()->routeIs('sorties.*') ? 'show' : '' }}" data-bs-parent="#menu-accordion">
-                        <ul class="submenu-list list-unstyled">
-                            <li class="submenu-item">
-                                <a class="submenu-link {{ request()->routeIs('entrees.index') ? 'active' : '' }}" href="#">Entrées</a>
-                            </li>
-                            <li class="submenu-item">
-                                <a class="submenu-link {{ request()->routeIs('sorties.index') ? 'active' : '' }}" href="#">Sorties</a>
-                            </li>
-                        </ul>
-                    </div>
+                    
                 </li>
 
                 <!-- Déconnexion 
