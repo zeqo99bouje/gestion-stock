@@ -145,7 +145,6 @@
                                 <th>Produit</th>
                                 <th>Type</th>
                                 <th>Quantité</th>
-                                <th>Destination</th>
                                 <th>Date</th>
                             </tr>
                         </thead>
@@ -159,8 +158,7 @@
                                     </span>
                                 </td>
                                 <td>{{ $m->quantite }}</td>
-                                <td>{{ $m->produit->affectation->nom ?? 'N/A' }}</td>
-                                <td>{{ \Carbon\Carbon::parse($m->date_mouvement)->format('d/m/Y H:i') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($m->date_mouvement)->format('d/m/Y') }}</td>
                             </tr>
                             @empty
                             <tr>
