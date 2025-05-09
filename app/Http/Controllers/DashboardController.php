@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Produit;
 use App\Models\Mouvement;
+use App\Models\Affectation; // Assuming you have an Affectation model
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,15 +15,18 @@ class DashboardController extends Controller
         $societe_id = $request->societe_id;
         $affectation_id = $request->affectation_id;
 
+        // Produits query with filters
         $produitsQuery = Produit::query();
         if ($societe_id) $produitsQuery->where('societe_id', $societe_id);
         if ($affectation_id) $produitsQuery->where('affectation_id', $affectation_id);
 
+        // Statistics
         $totalProduits = $produitsQuery->count();
         $stockTotal = $produitsQuery->sum('quantite_stock');
         $stockFaible = $produitsQuery->where('quantite_stock', '<', 50)->get();
         $produits = $produitsQuery->get();
 
+        // Mouvements
         $mouvements = Mouvement::with('produit')->latest()->limit(5)->get();
         $totalEntrees = Mouvement::where('type', 'entrée')->sum('quantite');
         $totalSorties = Mouvement::where('type', 'sortie')->sum('quantite');
@@ -38,9 +42,30 @@ class DashboardController extends Controller
             ->get()
             ->filter(fn($m) => $m->produit !== null);
 
-        return view('home', compact(
-            'totalProduits', 'stockTotal', 'totalEntrees', 'totalSorties',
-            'mouvements', 'chartData', 'stockFaible', 'produits'
-        ));
+         // Quantités distribuées par affectation (sorties)
+         $sortiesParAffectation = Mouvement::select(
+            'affectations.id as affectation_id',
+            'affectations.nom as affectation_name',
+            DB::raw('GROUP_CONCAT(produits.designation) as designations'),
+            DB::raw('SUM(mouvements.quantite) as total_quantite')
+        )
+        ->join('produits', 'mouvements.produit_id', '=', 'produits.id')
+        ->join('affectations', 'produits.affectation_id', '=', 'affectations.id')
+        ->where('mouvements.type', 'sortie')
+        ->groupBy('affectations.id', 'affectations.nom')
+        ->get()
+        ->map(function ($item) {
+            return [
+                'affectation_id' => $item->affectation_id,
+                'affectation_name' => $item->affectation_name ?? 'Sans affectation',
+                'designations' => array_unique(explode(',', $item->designations)),
+                'total_quantite' => $item->total_quantite,
+            ];
+        });
+
+    return view('home', compact(
+        'totalProduits', 'stockTotal', 'totalEntrees', 'totalSorties',
+        'mouvements', 'chartData', 'stockFaible', 'produits', 'sortiesParAffectation'
+    ));
     }
 }
