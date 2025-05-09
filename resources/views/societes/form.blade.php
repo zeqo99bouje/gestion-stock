@@ -1,3 +1,6 @@
+@extends('layouts.template')
+
+@section('content')
 <div class="mb-3">
     <label>Nom</label>
     <input type="text" name="nom" value="{{ old('nom', $societe->nom ?? '') }}" class="form-control" required>
@@ -14,3 +17,4 @@
     <label>Email</label>
     <input type="email" name="email" value="{{ old('email', $societe->email ?? '') }}" class="form-control">
 </div>
+@endsection
