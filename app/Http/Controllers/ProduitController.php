@@ -11,12 +11,26 @@ use Illuminate\Support\Facades\DB;
 use App\Exports\ProduitsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Log;
+
 
 class ProduitController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $produits = Produit::with('societe', 'affectation')->get();
+        $search = $request->query('search');
+
+        $produits = Produit::with(['societe', 'affectation'])
+            ->when($search, function ($query, $search) {
+                return $query->where('numero_inventaire', 'like', '%' . $search . '%')
+                             ->orWhere('designation', 'like', '%' . $search . '%')
+                             ->orWhereHas('societe', function ($q) use ($search) {
+                                 $q->where('nom', 'like', '%' . $search . '%');
+                             });
+            })
+            ->paginate(10)
+            ->appends(['search' => $search]);
+
         return view('produits.index', compact('produits'));
     }
 
@@ -142,23 +156,38 @@ class ProduitController extends Controller
         return redirect()->route('produits.index')->with('success', 'Produit supprimé avec succès.');
     }
 
-    public function exportExcel()
+    public function exportExcel(Request $request)
     {
         try {
-            return Excel::download(new ProduitsExport, 'produits.xlsx');
+            $search = $request->query('search');
+            Log::info('Exporting Excel', ['search' => $search, 'user' => auth()->user()->id ?? 'guest']);
+            return Excel::download(new ProduitsExport($search), 'produits_recherche_'.now()->format('Ymd_His').'.xlsx');
         } catch (\Exception $e) {
-            return redirect()->route('produits.index')->with('error', 'Erreur lors de l\'exportation en Excel.');
+            Log::error('Excel export failed', ['error' => $e->getMessage(), 'search' => $search]);
+            return redirect()->route('produits.index')->with('error', 'Erreur lors de l\'exportation en Excel: ' . $e->getMessage());
         }
     }
 
-    public function exportPdf()
+    public function exportPdf(Request $request)
     {
         try {
-            $produits = Produit::with(['societe', 'affectation'])->get();
+            $search = $request->query('search');
+            Log::info('Exporting PDF', ['search' => $search, 'user' => auth()->user()->id ?? 'guest']);
+            $produits = Produit::with(['societe', 'affectation'])
+                ->when($search, function ($query, $search) {
+                    return $query->where('numero_inventaire', 'like', '%' . $search . '%')
+                                 ->orWhere('designation', 'like', '%' . $search . '%')
+                                 ->orWhereHas('societe', function ($q) use ($search) {
+                                     $q->where('nom', 'like', '%' . $search . '%');
+                                 });
+                })
+                ->get();
             $pdf = Pdf::loadView('produits.pdf', compact('produits'));
-            return $pdf->download('produits.pdf');
+            return $pdf->download('produits_recherche_'.now()->format('Ymd_His').'.pdf');
         } catch (\Exception $e) {
-            return redirect()->route('produits.index')->with('error', 'Erreur lors de l\'exportation en PDF.');
+            Log::error('PDF export failed', ['error' => $e->getMessage(), 'search' => $search]);
+            return redirect()->route('produits.index')->with('error', 'Erreur lors de l\'exportation en PDF: ' . $e->getMessage());
         }
     }
+
 }
