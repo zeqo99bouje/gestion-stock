@@ -35,4 +35,9 @@ Route::middleware('auth.custom')->group(function () {
 
     // ✅ Route pour l'historique des mouvements
     Route::get('/mouvements', [MouvementController::class, 'index'])->name('mouvements.index');
+
+    // ✅ Routes personnalisées pour l'exportation
+    Route::get('/societes/export/excel', [SocieteController::class, 'exportExcel'])->name('societes.export.excel');
+    Route::get('/societes/export/pdf', [SocieteController::class, 'exportPdf'])->name('societes.export.pdf');
+    
 });
