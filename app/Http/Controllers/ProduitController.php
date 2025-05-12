@@ -8,6 +8,9 @@ use App\Models\Mouvement;
 use App\Models\Affectation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Exports\ProduitsExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ProduitController extends Controller
 {
@@ -137,5 +140,25 @@ class ProduitController extends Controller
     {
         $produit->delete();
         return redirect()->route('produits.index')->with('success', 'Produit supprimé avec succès.');
+    }
+
+    public function exportExcel()
+    {
+        try {
+            return Excel::download(new ProduitsExport, 'produits.xlsx');
+        } catch (\Exception $e) {
+            return redirect()->route('produits.index')->with('error', 'Erreur lors de l\'exportation en Excel.');
+        }
+    }
+
+    public function exportPdf()
+    {
+        try {
+            $produits = Produit::with(['societe', 'affectation'])->get();
+            $pdf = Pdf::loadView('produits.pdf', compact('produits'));
+            return $pdf->download('produits.pdf');
+        } catch (\Exception $e) {
+            return redirect()->route('produits.index')->with('error', 'Erreur lors de l\'exportation en PDF.');
+        }
     }
 }
