@@ -20,7 +20,7 @@
                 <div class="app-card-body p-4 d-flex align-items-center">
                     <div>
                         <h4 class="stats-type mb-1 text-white">Total Produits</h4>
-                        <div class="stats-figure">{{ $totalProduits }}</div>
+                        <div class="stats-figure text-white">{{ $totalProduits }}</div>
                         <div class="stats-desc">Produits enregistrés</div>
                     </div>
                     <i class="fas fa-boxes fa-2x ms-auto opacity-75"></i>
@@ -35,7 +35,7 @@
                 <div class="app-card-body p-4 d-flex align-items-center">
                     <div>
                         <h4 class="stats-type mb-1 text-white">Stock Total</h4>
-                        <div class="stats-figure">{{ $stockTotal }}</div>
+                        <div class="stats-figure text-white">{{ $stockTotal }}</div>
                         <div class="stats-desc">Unités en stock</div>
                     </div>
                     <i class="fas fa-warehouse fa-2x ms-auto opacity-75"></i>
@@ -49,7 +49,7 @@
                 <div class="app-card-body p-4 d-flex align-items-center">
                     <div>
                         <h4 class="stats-type mb-1 text-white">Entrées</h4>
-                        <div class="stats-figure">{{ $totalEntrees }}</div>
+                        <div class="stats-figure text-white">{{ $totalEntrees }}</div>
                         <div class="stats-desc">Unités reçues</div>
                     </div>
                     <i class="fas fa-arrow-down fa-2x ms-auto opacity-75"></i>
@@ -64,7 +64,7 @@
                 <div class="app-card-body p-4 d-flex align-items-center">
                     <div>
                         <h4 class="stats-type mb-1 text-white">Sorties</h4>
-                        <div class="stats-figure">{{ $totalSorties }}</div>
+                        <div class="stats-figure text-white">{{ $totalSorties }}</div>
                         <div class="stats-desc">Unités distribuées</div>
                     </div>
                     <i class="fas fa-arrow-up fa-2x ms-auto opacity-75"></i>
@@ -98,18 +98,6 @@
                     </div>
                     <div class="app-card-body p-4">
                         <canvas id="mouvementChart" height="250"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quantités Distribuées par Affectation -->
-            <div class="col-12 col-lg-6">
-                <div class="app-card app-card-chart shadow-sm h-100 bg-white">
-                    <div class="app-card-header p-4 border-bottom">
-                        <h4 class="mb-0 text-dark">Quantités Distribuées par Affectation</h4>
-                    </div>
-                    <div class="app-card-body p-4">
-                        <canvas id="barChart" height="250"></canvas>
                     </div>
                 </div>
             </div>
