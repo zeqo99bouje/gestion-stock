@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Societe;
 use Illuminate\Http\Request;
+use App\Exports\SocietesExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SocieteController extends Controller
 {
@@ -68,5 +71,17 @@ class SocieteController extends Controller
         $societe->delete();
 
         return redirect()->route('societes.index')->with('success', 'Société supprimée avec succès.');
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new SocietesExport, 'societes.xlsx');
+    }
+
+    public function exportPdf()
+    {
+        $societes = Societe::all();
+        $pdf = Pdf::loadView('societes.pdf', compact('societes'));
+        return $pdf->download('societes.pdf');
     }
 }
