@@ -14,6 +14,10 @@ class Produit extends Model
         'societe_id', 'bon_commande', 'date_reception', 'affectation_id', 'remarque'
     ];
 
+    protected $casts = [
+        'date_reception' => 'datetime', // Cast to DateTime
+    ];
+
     public function societe()
     {
         return $this->belongsTo(Societe::class);
