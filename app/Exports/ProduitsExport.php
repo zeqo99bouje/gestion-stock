@@ -3,15 +3,34 @@
 namespace App\Exports;
 
 use App\Models\Produit;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Illuminate\Support\Carbon;
 
-class ProduitsExport implements FromCollection, WithHeadings, WithMapping
+class ProduitsExport implements FromQuery, WithHeadings, WithMapping
 {
-    public function collection()
+    use Exportable;
+
+    protected $search;
+
+    public function __construct($search = null)
     {
-        return Produit::with(['societe', 'affectation'])->get();
+        $this->search = $search;
+    }
+
+    public function query()
+    {
+        return Produit::query()
+            ->with(['societe', 'affectation'])
+            ->when($this->search, function ($query, $search) {
+                return $query->where('numero_inventaire', 'like', '%' . $search . '%')
+                             ->orWhere('designation', 'like', '%' . $search . '%')
+                             ->orWhereHas('societe', function ($q) use ($search) {
+                                 $q->where('nom', 'like', '%' . $search . '%');
+                             });
+            });
     }
 
     public function headings(): array
@@ -39,7 +58,9 @@ class ProduitsExport implements FromCollection, WithHeadings, WithMapping
             $produit->societe->nom ?? '-',
             $produit->affectation->nom ?? 'Stock principal',
             $produit->bon_commande ?? '-',
-            $produit->date_reception ?? '-',
+            $produit->date_reception instanceof \DateTime
+                ? $produit->date_reception->format('d/m/Y')
+                : ($produit->date_reception ? $produit->date_reception : '-'),
             $produit->remarque ?? '-',
         ];
     }
