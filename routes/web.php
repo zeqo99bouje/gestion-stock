@@ -36,8 +36,12 @@ Route::middleware('auth.custom')->group(function () {
     // ✅ Route pour l'historique des mouvements
     Route::get('/mouvements', [MouvementController::class, 'index'])->name('mouvements.index');
 
-    // ✅ Routes personnalisées pour l'exportation
+    //------ ✅ Routes personnalisées pour l'exportation---------------
+    // ✅ Routes personnalisées pour l'exportation des sociétés
     Route::get('/societes/export/excel', [SocieteController::class, 'exportExcel'])->name('societes.export.excel');
     Route::get('/societes/export/pdf', [SocieteController::class, 'exportPdf'])->name('societes.export.pdf');
+    // ✅ Routes personnalisées pour l'exportation des produits
+    Route::get('/produits/export/excel', [ProduitController::class, 'exportExcel'])->name('produits.export.excel');
+    Route::get('/produits/export/pdf', [ProduitController::class, 'exportPdf'])->name('produits.export.pdf');
     
 });
