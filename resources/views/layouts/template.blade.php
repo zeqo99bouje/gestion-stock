@@ -130,7 +130,7 @@
             window.addEventListener('load', () => {
                 setTimeout(() => {
                     loader.classList.add('hidden');
-                }, 200); // Delay for smooth transition
+                }, 100); // Delay for smooth transition
             });
 
             // Optional: Show loader during form submissions
