@@ -140,7 +140,7 @@
                     <img src="{{ Auth::user()->photo ?? asset('assets/img/default-avatar.png') }}" alt="Avatar de {{ Auth::user()->name }}" class="avatar-img">
                 </div>
                 <h3 class="mt-3 mb-1">{{ Auth::user()->name }}</h3>
-                <p class="text-muted">{{ Auth::user()->email }}</p>
+                <p class="text" style="color: white;">{{ Auth::user()->email }}</p>
             </div>
         </div>
 
