@@ -12,7 +12,7 @@
             font-family: 'Poppins', sans-serif;
         }
         .profile-header {
-            background: linear-gradient(135deg,rgb(0, 183, 255), #3399ff);
+            background: linear-gradient(135deg,rgb(39, 190, 228), #3399ff);
             color: #fff;
             border-radius: 12px;
             overflow: hidden;
@@ -53,7 +53,7 @@
             color: #333;
         }
         .btn-primary {
-            background-color: #007bff;
+            background-color:rgb(52, 158, 219);
             border: none;
             border-radius: 8px;
             padding: 12px 24px;
@@ -103,13 +103,13 @@
             transition: width 0.3s ease, background-color 0.3s ease;
         }
         .password-strength .bg-weak {
-            background-color: #dc3545; /* Rouge */
+            background-color: #dc3545;
         }
         .password-strength .bg-medium {
-            background-color: #ffc107; /* Jaune */
+            background-color: #ffc107;
         }
         .password-strength .bg-strong {
-            background-color: #28a745; /* Vert */
+            background-color: #28a745;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
@@ -149,7 +149,6 @@
             <div class="card-body">
                 <h5 class="mb-4">Modifier mon profil</h5>
 
-                <!-- Messages -->
                 @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ session('success') }}
@@ -157,7 +156,7 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" id="profileForm">
                     @csrf
                     @method('PUT')
 
@@ -181,13 +180,12 @@
                         @enderror
                     </div>
 
-
                     <!-- Mot de passe -->
                     <div class="mb-3">
                         <label for="password" class="form-label">Nouveau mot de passe (facultatif)</label>
                         <div class="position-relative">
                             <input type="password" class="form-control" id="password" name="password" aria-describedby="passwordHelp">
-                            <i class="fas fa-eye toggle-password" id="togglePassword" aria-hidden="true"></i>
+                            <i class="fas fa-eye toggle-password" id="togglePassword"></i>
                         </div>
                         <small id="passwordHelp" class="form-text text-muted">Laissez vide pour ne pas modifier.</small>
                         @error('password')
@@ -210,7 +208,7 @@
 
                     <!-- Boutons -->
                     <div class="d-flex gap-3">
-                        <button type="submit" class="btn btn-primary btn-submit" disabled>
+                        <button type="submit" class="btn btn-primary btn-submit">
                             <span class="spinner" style="display: none;"><i class="fas fa-spinner fa-pulse"></i></span>
                             Mettre à jour
                         </button>
@@ -224,10 +222,11 @@
 
     
 
-
 @section('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            console.log('Profile form script loaded'); // Débogage
+
             // Basculer l'affichage du mot de passe
             const togglePassword = document.querySelector('#togglePassword');
             const passwordInput = document.querySelector('#password');
@@ -238,67 +237,82 @@
                     passwordInput.setAttribute('type', type);
                     this.classList.toggle('fa-eye');
                     this.classList.toggle('fa-eye-slash');
+                    console.log('Toggle password:', type); // Débogage
                 });
+            } else {
+                console.error('Toggle password elements not found');
             }
 
             // Évaluer la force du mot de passe
             const passwordStrength = document.querySelector('.password-strength');
-            const progressBar = passwordStrength.querySelector('.progress-bar');
-            const strengthText = passwordStrength.querySelector('.strength-text');
+            const progressBar = passwordStrength?.querySelector('.progress-bar');
+            const strengthText = passwordStrength?.querySelector('.strength-text');
 
-            passwordInput.addEventListener('input', function () {
-                const password = this.value;
-                let strength = 0;
+            if (passwordInput && passwordStrength && progressBar && strengthText) {
+                passwordInput.addEventListener('input', function () {
+                    const password = this.value;
+                    let strength = 0;
 
-                // Critères de force
-                if (password.length >= 8) strength += 20;
-                if (/[A-Z]/.test(password)) strength += 20;
-                if (/[a-z]/.test(password)) strength += 20;
-                if (/[0-9]/.test(password)) strength += 20;
-                if (/[^A-Za-z0-9]/.test(password)) strength += 20;
+                    if (password.length >= 8) strength += 20;
+                    if (/[A-Z]/.test(password)) strength += 20;
+                    if (/[a-z]/.test(password)) strength += 20;
+                    if (/[0-9]/.test(password)) strength += 20;
+                    if (/[^A-Za-z0-9]/.test(password)) strength += 20;
 
-                // Mettre à jour la barre
-                progressBar.style.width = `${strength}%`;
-                progressBar.setAttribute('aria-valuenow', strength);
+                    progressBar.style.width = `${strength}%`;
+                    progressBar.setAttribute('aria-valuenow', strength);
 
-                // Changer la couleur et le texte
-                if (strength < 50) {
-                    progressBar.classList.remove('bg-medium', 'bg-strong');
-                    progressBar.classList.add('bg-weak');
-                    strengthText.textContent = 'Faible';
-                    strengthText.style.color = '#dc3545';
-                } else if (strength < 80) {
-                    progressBar.classList.remove('bg-weak', 'bg-strong');
-                    progressBar.classList.add('bg-medium');
-                    strengthText.textContent = 'Moyen';
-                    strengthText.style.color = '#ffc107';
-                } else {
-                    progressBar.classList.remove('bg-weak', 'bg-medium');
-                    progressBar.classList.add('bg-strong');
-                    strengthText.textContent = 'Fort';
-                    strengthText.style.color = '#28a745';
-                }
+                    if (strength < 50) {
+                        progressBar.classList.remove('bg-medium', 'bg-strong');
+                        progressBar.classList.add('bg-weak');
+                        strengthText.textContent = 'Faible';
+                        strengthText.style.color = '#dc3545';
+                    } else if (strength < 80) {
+                        progressBar.classList.remove('bg-weak', 'bg-strong');
+                        progressBar.classList.add('bg-medium');
+                        strengthText.textContent = 'Moyen';
+                        strengthText.style.color = '#ffc107';
+                    } else {
+                        progressBar.classList.remove('bg-weak', 'bg-medium');
+                        progressBar.classList.add('bg-strong');
+                        strengthText.textContent = 'Fort';
+                        strengthText.style.color = '#28a745';
+                    }
 
-                // Afficher la barre si le champ n'est pas vide
-                passwordStrength.style.display = password ? 'block' : 'none';
-            });
+                    passwordStrength.style.display = password ? 'block' : 'none';
+                    console.log('Password strength:', strength); // Débogage
+                });
+            } else {
+                console.error('Password strength elements not found');
+            }
 
             // Activer/désactiver le bouton de soumission
-            const form = document.querySelector('form');
+            const form = document.querySelector('#profileForm');
             const submitBtn = document.querySelector('.btn-submit');
-            const inputs = form.querySelectorAll('input');
+            const inputs = form?.querySelectorAll('input');
 
-            inputs.forEach(input => {
-                input.addEventListener('input', () => {
-                    submitBtn.disabled = !form.checkValidity();
+            if (form && submitBtn && inputs) {
+                // Vérifier la validité initiale
+                submitBtn.disabled = !form.checkValidity();
+                console.log('Initial form validity:', form.checkValidity()); // Débogage
+
+                inputs.forEach(input => {
+                    input.addEventListener('input', () => {
+                        const isValid = form.checkValidity();
+                        submitBtn.disabled = !isValid;
+                        console.log('Form validity:', isValid, 'Input:', input.id); // Débogage
+                    });
                 });
-            });
 
-            // Animation de chargement lors de la soumission
-            form.addEventListener('submit', () => {
-                submitBtn.disabled = true;
-                submitBtn.querySelector('.spinner').style.display = 'inline-block';
-            });
+                // Débogage de la soumission
+                form.addEventListener('submit', (event) => {
+                    console.log('Form submitted');
+                    submitBtn.disabled = true;
+                    submitBtn.querySelector('.spinner').style.display = 'inline-block';
+                });
+            } else {
+                console.error('Form or submit button not found');
+            }
         });
     </script>
 @endsection
