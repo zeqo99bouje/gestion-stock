@@ -7,6 +7,7 @@ use App\Http\Controllers\SocieteController;
 use App\Http\Controllers\AffectationController;
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\MouvementController;
+use App\Http\Controllers\ProfileController;
 
 // Page de connexion
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -23,6 +24,10 @@ Route::middleware('auth.custom')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // ✅ Routes pour le profil utilisateur
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     // Ressources principales
     Route::resource('societes', SocieteController::class);
@@ -43,5 +48,7 @@ Route::middleware('auth.custom')->group(function () {
     // ✅ Routes personnalisées pour l'exportation des produits
     Route::get('/produits/export/excel', [ProduitController::class, 'exportExcel'])->name('produits.export.excel');
     Route::get('/produits/export/pdf', [ProduitController::class, 'exportPdf'])->name('produits.export.pdf');
+
+
     
 });
