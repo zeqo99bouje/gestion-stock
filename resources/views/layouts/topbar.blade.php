@@ -16,11 +16,11 @@
                 
                 <div class="app-utility-item app-user-dropdown dropdown">
                     <a class="dropdown-toggle" id="user-dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
-                        <img src="{{asset('assets/images/user1.jpg')}}" alt="user profile">
+                        <img src="{{asset('assets/img/default-avatar.png')}}" alt="user profile">
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="user-dropdown-toggle">
                         <!-- Update the link to point to the profile page -->
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="{{route('profile.show')}}">Profile</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <a class="dropdown-item" href="{{ route('logout') }}"
