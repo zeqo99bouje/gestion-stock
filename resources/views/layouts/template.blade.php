@@ -1,36 +1,31 @@
-
 <!DOCTYPE html>
-<html lang="en"> 
+<html lang="fr">
 <head>
-    <title>Agri tech</title>
+    <title>@yield('title', 'Gestion de Stock - EST Ouarzazate')</title>
     
     <!-- Meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <meta name="description" content="Portal - Bootstrap 5 Admin Dashboard Template For Developers">
-    <meta name="author" content="Xiaoying Riley at 3rd Wave Media">    
-    <link rel="shortcut icon" href="favicon.ico"> 
+    <meta name="description" content="Gestion de stock pour l'École Supérieure de Technologie - Ouarzazate">
+    <meta name="author" content="EST Ouarzazate">
+
+    <!-- Favicons -->
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/img/est_logo.jpg') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/img/est_logo.jpg') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/img/est_logo.jpg') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/img/est_logo.jpg') }}">
 
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    
-    <!-- FontAwesome JS-->
-    <script defer src="{{asset('assets/plugins/fontawesome/js/all.min.js')}}"></script>
-    <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- App CSS -->  
-    <link id="theme-style" rel="stylesheet" href="{{asset('assets/css/portal.css')}}">
-    <!--chart.js-->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-     <!-- Loader CSS -->
-     <style>
-        /* Loader container */
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/portal.css') }}">
+
+    <!-- Loader CSS -->
+    <style>
         .loader-container {
             position: fixed;
             top: 0;
@@ -45,23 +40,19 @@
             opacity: 1;
             transition: opacity 0.5s ease-out;
         }
-
         .loader-container.hidden {
             opacity: 0;
             pointer-events: none;
         }
-
-        /* Loader animation */
         .loader {
             width: 50px;
             aspect-ratio: 1;
             display: grid;
             border: 4px solid transparent;
             border-radius: 50%;
-            border-right-color:rgb(13, 114, 139);
+            border-right-color: #007bff;
             animation: l15 1s infinite linear;
         }
-
         .loader::before,
         .loader::after {    
             content: "";
@@ -71,69 +62,51 @@
             border-radius: 50%;
             animation: l15 2s infinite;
         }
-
         .loader::after {
             margin: 8px;
             animation-duration: 3s;
         }
-
         @keyframes l15 { 
             100% { transform: rotate(1turn); }
         }
+        @yield('styles')
     </style>
+</head>
 
-</head> 
-
-<body class="app">   
-    
-<div class="loader-container" id="loader">
+<body class="app">
+    <div class="loader-container" id="loader">
         <div class="loader"></div>
     </div>
 
-    <header class="app-header fixed-top">	   	            
-     @include('layouts.topbar')
-     @include('layouts.sidebar')
-    </header><!--//app-header-->
-    
+    <header class="app-header fixed-top">
+        @include('layouts.topbar')
+        @include('layouts.sidebar')
+    </header>
+
     <div class="app-wrapper">
-	    
-	    <div class="app-content pt-3 p-md-3 p-lg-4">
-		    <div class="container-xl">
-			    @yield('content')
-                @yield('scripts')
+        <div class="app-content pt-3 p-md-3 p-lg-4">
+            <div class="container-xl">
+                @yield('content')
+            </div>
+        </div>
+    </div>
 
-			    
-		    </div><!--//container-fluid-->
-	    </div><!--//app-content-->
-	    
-	    
-	    
-    </div><!--//app-wrapper-->    					
+    <!-- Javascript -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('assets/plugins/chart.js/chart.min.js') }}"></script>
+    <script src="{{ asset('assets/js/index-charts.js') }}"></script>
+    <script src="{{ asset('assets/js/app.js') }}"></script>
 
- 
-    <!-- Javascript -->          
-    <script src="{{asset('assets/plugins/popper.min.js')}}"></script>
-    <script src="{{asset('assets/plugins/bootstrap/js/bootstrap.min.js')}}"></script>  
-
-    <!-- Charts JS -->
-    <script src="{{asset('assets/plugins/chart.js/chart.min.js')}}"></script> 
-    <script src="{{asset('assets/js/index-charts.js')}}"></script> 
-    
-    <!-- Page Specific JS -->
-    <script src="{{asset('assets/js/app.js')}}"></script> 
-       <!-- Loader JS -->
-       <script>
+    <!-- Loader JS -->
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
             const loader = document.getElementById('loader');
-
-            // Hide loader when page is fully loaded
             window.addEventListener('load', () => {
                 setTimeout(() => {
                     loader.classList.add('hidden');
-                }, 100); // Delay for smooth transition
+                }, 100);
             });
-
-            // Optional: Show loader during form submissions
             document.querySelectorAll('form').forEach(form => {
                 form.addEventListener('submit', () => {
                     loader.classList.remove('hidden');
@@ -142,6 +115,6 @@
         });
     </script>
 
+    @yield('scripts')
 </body>
-</html> 
-
+</html>
