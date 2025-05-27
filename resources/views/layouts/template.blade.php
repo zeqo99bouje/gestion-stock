@@ -69,8 +69,9 @@
         @keyframes l15 { 
             100% { transform: rotate(1turn); }
         }
-        @yield('styles')
+       
     </style>
+     @yield('styles')
 </head>
 
 <body class="app">

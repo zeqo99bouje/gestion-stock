@@ -1,4 +1,7 @@
+<!-- resources/views/mouvements/index.blade.php -->
 @extends('layouts.template')
+
+@section('title', 'Historique des Mouvements - Gestion de Stock')
 
 @section('content')
     <div class="container-fluid py-4">
@@ -28,7 +31,7 @@
                 <h5 class="mb-0">Filtres de Recherche</h5>
             </div>
             <div class="card-body">
-                <form method="GET" action="{{ route('mouvements.index') }}" class="row g-3">
+                <form method="GET" action="{{ route('mouvements.index') }}" class="row g-3" id="filterForm">
                     <div class="col-md-3">
                         <label for="produit_id" class="form-label">Produit</label>
                         <select name="produit_id" id="produit_id" class="form-select @error('produit_id') is-invalid @enderror" aria-describedby="produit_id-error">
@@ -119,15 +122,21 @@
                 </tbody>
             </table>
         </div>
-
     </div>
+@endsection
 
-    <!-- Embedded CSS -->
+@section('styles')
     <style>
+        /* Général */
+        .container-fluid {
+            font-family: 'Poppins', sans-serif;
+        }
+
         /* Card styling for filter form */
         .card {
             border-radius: 8px;
             border: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
         }
 
         /* Tooltip styling */
@@ -138,7 +147,6 @@
             border-radius: 4px;
             font-size: 0.875rem;
         }
-
         .tooltip .tooltip-arrow::before {
             border-top-color: #333 !important;
         }
@@ -163,11 +171,6 @@
             animation: slideUp 0.6s ease-out 0.2s;
         }
 
-        /* Fade-in animation for pagination */
-        .animate-pagination {
-            animation: fadeIn 0.5s ease-in-out 0.4s;
-        }
-
         /* Fade-in animation for table rows */
         .animate-row {
             animation: fadeInRow 0.5s ease-out;
@@ -178,18 +181,21 @@
         .animate-btn {
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-
         .animate-btn:hover {
             transform: scale(1.05);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
-        /* Ensure form inputs are visually clear */
+        /* Form inputs */
         .form-control, .form-select {
+            border-radius: 6px;
+            padding: 10px;
             transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
-
-        /* Highlight invalid inputs */
+        .form-control:focus, .form-select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
         .form-control.is-invalid, .form-select.is-invalid {
             border-color: #dc3545;
         }
@@ -198,14 +204,26 @@
         .table th, .table td {
             vertical-align: middle;
         }
-
         .table-responsive {
+            border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+        .table-dark {
+            background-color: #343a40;
+        }
 
-        /* Style alerts for consistency */
+        /* Badges */
+        .badge.bg-success {
+            background-color: #28a745 !important;
+        }
+        .badge.bg-danger {
+            background-color: #dc3545 !important;
+        }
+
+        /* Alerts */
         .alert-success {
             border-left: 4px solid #28a745;
+            background-color: #e8f4ea;
         }
 
         /* Keyframes for animations */
@@ -213,12 +231,10 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
         @keyframes slideUp {
             from { transform: translateY(20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-
         @keyframes fadeInRow {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -237,14 +253,22 @@
             }
         }
     </style>
+@endsection
 
-    <!-- Embedded JavaScript -->
+@section('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            console.log('Mouvements index script loaded'); // Débogage
+
             // Initialize tooltips
             const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
             tooltipTriggerList.forEach(tooltipTriggerEl => {
-                new bootstrap.Tooltip(tooltipTriggerEl);
+                try {
+                    new bootstrap.Tooltip(tooltipTriggerEl);
+                    console.log('Tooltip initialized for:', tooltipTriggerEl); // Débogage
+                } catch (error) {
+                    console.error('Tooltip initialization failed:', error);
+                }
             });
 
             // Row animation delay
@@ -252,6 +276,16 @@
             rows.forEach((row, index) => {
                 row.style.setProperty('--row-index', index);
             });
+
+            // Debug form submission
+            const filterForm = document.querySelector('#filterForm');
+            if (filterForm) {
+                filterForm.addEventListener('submit', () => {
+                    console.log('Filter form submitted'); // Débogage
+                });
+            } else {
+                console.error('Filter form not found'); // Débogage
+            }
         });
     </script>
 @endsection
